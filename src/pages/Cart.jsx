@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "../utils/axios";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import Navbar from "../components/Navbar";
+import { useTranslation } from 'react-i18next';
 
 const Cart = () => {
   const { slug } = useParams();
@@ -10,6 +11,7 @@ const Cart = () => {
   const [borderSlug, setBorderSlug] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +49,7 @@ const Cart = () => {
             className="mt-16 text-2xl bg-transparent text-black border border-transparent font-semibold cursor-pointer"
           >
             <MdOutlineKeyboardBackspace className="absolute -ml-7 w-6 h-6 mt-1" />
-            Back
+            {t('back')}
           </button>
         </div>
 
@@ -70,37 +72,37 @@ const Cart = () => {
             </div>
             <div className="ml-[580px] -mt-[400px]">
               <h1 className="text-4xl font-semibold">
-                {product.name?.common || "Country Name"}
+                {product.name?.common || t('noProductFound')}
               </h1>
               <br />
               <div className="flex flex-wrap gap-10">
                 <div className="w-[300px]">
                   <p className="font-semibold text-lg">
-                    Native Name :{" "}
+                    {t('nativeName')} 
                     <span className="font-normal text-base">
                       {product.name?.nativeName}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    Population :{" "}
+                    {t('population')} 
                     <span className="font-normal text-base">
                       {product.population}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    Region :{" "}
+                    {t('region')} 
                     <span className="font-normal text-base">
                       {product.region}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    Sub Region :{" "}
+                    {t('subRegion')} 
                     <span className="font-normal text-base">
                       {product.subregion}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    Capital :{" "}
+                    {t('capital')} 
                     <span className="font-normal text-base">
                       {product.capital}
                     </span>
@@ -108,19 +110,19 @@ const Cart = () => {
                 </div>
                 <div className="w-[1800px] ml-[320px] -mt-44">
                   <p className="font-semibold text-lg">
-                    Top Level Domain :{" "}
+                    {t('topLevelDomain')} 
                     <span className="font-normal text-base">
                       {product.topLevelDomain?.[0]}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    Currencies :{" "}
+                    {t('currencies')}
                     <span className="font-normal text-base">
                       {product.currencies}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    Languages :{" "}
+                    {t('languages')}
                     <span className="font-normal text-base">
                       {product.languages}
                     </span>
@@ -129,7 +131,7 @@ const Cart = () => {
               </div>
               <br />
               <div className="-mt-8">
-                <p className="font-semibold text-lg">Border Countries:</p>
+                <p className="font-semibold text-lg">{t('borderCountries')}:</p>
                 <ul className="flex gap-4 flex-wrap ">
                   {product.borders.length > 0 ? (
                     product.borders.map((border, index) => (
@@ -142,7 +144,7 @@ const Cart = () => {
                       </li>
                     ))
                   ) : (
-                    <li>No borders available</li>
+                    <li>{t('noBordersAvailable')}</li>
                   )}
                 </ul>
               </div>
@@ -150,7 +152,7 @@ const Cart = () => {
           </div>
         ) : (
           <div className="flex justify-center items-center mt-12">
-            <p>No product found</p>
+            <p>{t('noProductFound')}</p>
           </div>
         )}
       </div>
