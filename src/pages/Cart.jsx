@@ -1,88 +1,161 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "../utils/axios";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import Navbar from "../components/Navbar";
 
-function Cart() {
+const Cart = () => {
   const { slug } = useParams();
-  const [country, setCountry] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [region, setRegion] = useState("");
+  const [product, setProduct] = useState(null);
+  const [borderSlug, setBorderSlug] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCountryDetails = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const endpoint = borderSlug ? `countries/${borderSlug}` : `countries/${slug}`;
+
       try {
-        const response = await axios.get(
-          `https://frontend-mentor-apis-6efy.onrender.com/countries/${slug}`
-        );
-        setCountry(response.data);
-      } catch (error) {
-        console.error("Error fetching country details:", error);
+        const response = await axios.get(endpoint);
+        setProduct(response.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false); 
       }
     };
-    fetchCountryDetails();
-  }, [slug]);
 
-  if (!country) return <div>Loading...</div>;
+    fetchData();
+  }, [slug, borderSlug]);
+
+  const handleBack = () => {
+    navigate("/");
+  };
+
+  const handleBorderClick = (borderSlug) => {
+    setBorderSlug(borderSlug);
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <Navbar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        setRegion={setRegion}
-      />
-      <Link to="/" className="text-blue-500 mb-4 inline-block">
-        ← Back
-      </Link>
-      <div className="max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-lg overflow-hidden">
-        <img
-          src={country.flags.png}
-          alt={country.name.common}
-          className="w-9/12 h-64 object-cover"
-        />
-        <div className="p-6">
-          <h2 className="text-3xl font-bold mb-2">{country.name.common}</h2>
-          <p className="mb-2">
-            <strong>Native Name:</strong> {country.name.nativeName || "N/A"}
-          </p>
-          <p className="mb-2">
-            <strong>Population:</strong> {country.population.toLocaleString()}
-          </p>
-          <p className="mb-2">
-            <strong>Region:</strong> {country.region}
-          </p>
-          <p className="mb-2">
-            <strong>Sub Region:</strong> {country.subregion}
-          </p>
-          <p className="mb-2">
-            <strong>Capital:</strong>{" "}
-            {country.capital ? country.capital[0] : "N/A"}
-          </p>
-          <p className="mb-2">
-            <strong>Top Level Domain:</strong>{" "}
-            {country.tld ? country.tld.join(", ") : "N/A"}
-          </p>
-          <p className="mb-2">
-            <strong>Currencies:</strong>{" "}
-            {country.currencies
-              ? Object.keys(country.currencies).join(", ")
-              : "N/A"}
-          </p>
-          <p className="mb-2">
-            <strong>Languages:</strong>{" "}
-            {country.languages
-              ? Object.values(country.languages).join(", ")
-              : "N/A"}
-          </p>
-          <p className="mb-2">
-            <strong>Border Countries:</strong>{" "}
-            {country.borders ? country.borders.join(", ") : "None"}
-          </p>
+    <div>
+      <Navbar />
+      <div className="max-w-5xl mx-auto">
+        <div className="mt-10 -ml-16">
+          <button
+            onClick={handleBack}
+            className="mt-16 text-2xl bg-transparent text-black border border-transparent font-semibold cursor-pointer"
+          >
+            <MdOutlineKeyboardBackspace className="absolute -ml-7 w-6 h-6 mt-1" />
+            Back
+          </button>
         </div>
+
+        {isLoading ? ( 
+          <div className="flex justify-center items-center h-64">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        ) : product ? (
+          <div className="mt-10 -ml-24 flex-wrap gap-20">
+            <div className="w-[540px] h-[391px]">
+              {product.flags && product.flags.png ? (
+                <img
+                  src={product.flags.png}
+                  alt={product.name?.common}
+                  className="w-full h-full rounded-2xl object-cover"
+                />
+              ) : (
+                <p>...</p>
+              )}
+            </div>
+            <div className="ml-[580px] -mt-[400px]">
+              <h1 className="text-4xl font-semibold">
+                {product.name?.common || "Country Name"}
+              </h1>
+              <br />
+              <div className="flex flex-wrap gap-10">
+                <div className="w-[300px]">
+                  <p className="font-semibold text-lg">
+                    Native Name :{" "}
+                    <span className="font-normal text-base">
+                      {product.name?.nativeName}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-lg">
+                    Population :{" "}
+                    <span className="font-normal text-base">
+                      {product.population}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-lg">
+                    Region :{" "}
+                    <span className="font-normal text-base">
+                      {product.region}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-lg">
+                    Sub Region :{" "}
+                    <span className="font-normal text-base">
+                      {product.subregion}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-lg">
+                    Capital :{" "}
+                    <span className="font-normal text-base">
+                      {product.capital}
+                    </span>
+                  </p>
+                </div>
+                <div className="w-[1800px] ml-[320px] -mt-44">
+                  <p className="font-semibold text-lg">
+                    Top Level Domain :{" "}
+                    <span className="font-normal text-base">
+                      {product.topLevelDomain?.[0]}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-lg">
+                    Currencies :{" "}
+                    <span className="font-normal text-base">
+                      {product.currencies}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-lg">
+                    Languages :{" "}
+                    <span className="font-normal text-base">
+                      {product.languages}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <br />
+              <div className="-mt-8">
+                <p className="font-semibold text-lg">Border Countries:</p>
+                <ul className="flex gap-4 flex-wrap ">
+                  {product.borders.length > 0 ? (
+                    product.borders.map((border, index) => (
+                      <li
+                        key={index}
+                        className="flex w-24 items-center justify-center bg-gray-2 border border-gray-500 rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-300 text-center"
+                        onClick={() => handleBorderClick(border.slug)}
+                      >
+                        {border.common}
+                      </li>
+                    ))
+                  ) : (
+                    <li>No borders available</li>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex justify-center items-center mt-12">
+            <p>No product found</p>
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Cart;
