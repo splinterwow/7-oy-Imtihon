@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { useTranslation } from "react-i18next";
-import axios from "../utils/axios";
+import axios from "../redux/axios";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
@@ -71,7 +71,6 @@ function Home() {
             <option value="Oceania">{t("oceania")}</option>
           </select>
         </div>
-
 
 
         {isLoading ? (

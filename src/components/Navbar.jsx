@@ -50,6 +50,7 @@ function Navbar() {
           <p className="cursor-pointer flex items-center">
             <span className="mr-2 flex">
               <label className="swap swap-rotate">
+                
                 <input
                   type="checkbox"
                   onChange={toggleTheme}

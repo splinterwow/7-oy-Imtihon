@@ -1,6 +1,6 @@
 import axiosInstance from "axios";
 
-const http = axiosInstance.create({
+const  http = axiosInstance.create({
   baseURL: "https://frontend-mentor-apis-6efy.onrender.com",
   timeout: 5000,
 });

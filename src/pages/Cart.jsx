@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "../utils/axios";
+import axios from "../redux/axios";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import Navbar from "../components/Navbar";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const Cart = () => {
+
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [borderSlug, setBorderSlug] = useState(null);
@@ -16,7 +17,9 @@ const Cart = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const endpoint = borderSlug ? `countries/${borderSlug}` : `countries/${slug}`;
+      const endpoint = borderSlug
+        ? `countries/${borderSlug}`
+        : `countries/${slug}`;
 
       try {
         const response = await axios.get(endpoint);
@@ -24,7 +27,7 @@ const Cart = () => {
       } catch (err) {
         console.error(err);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
 
@@ -49,11 +52,11 @@ const Cart = () => {
             className="mt-16 text-2xl bg-transparent text-black border border-transparent font-semibold cursor-pointer"
           >
             <MdOutlineKeyboardBackspace className="absolute -ml-7 w-6 h-6 mt-1" />
-            {t('back')}
+            {t("back")}
           </button>
         </div>
 
-        {isLoading ? ( 
+        {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
@@ -72,37 +75,37 @@ const Cart = () => {
             </div>
             <div className="ml-[580px] -mt-[400px]">
               <h1 className="text-4xl font-semibold">
-                {product.name?.common || t('noProductFound')}
+                {product.name?.common || t("noProductFound")}
               </h1>
               <br />
               <div className="flex flex-wrap gap-10">
                 <div className="w-[300px]">
                   <p className="font-semibold text-lg">
-                    {t('nativeName')} 
+                    {t("nativeName")}
                     <span className="font-normal text-base">
                       {product.name?.nativeName}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    {t('population')} 
+                    {t("population")}
                     <span className="font-normal text-base">
                       {product.population}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    {t('region')} 
+                    {t("region")}
                     <span className="font-normal text-base">
                       {product.region}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    {t('subRegion')} 
+                    {t("subRegion")}
                     <span className="font-normal text-base">
                       {product.subregion}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    {t('capital')} 
+                    {t("capital")}
                     <span className="font-normal text-base">
                       {product.capital}
                     </span>
@@ -110,28 +113,29 @@ const Cart = () => {
                 </div>
                 <div className="w-[1800px] ml-[320px] -mt-44">
                   <p className="font-semibold text-lg">
-                    {t('topLevelDomain')} 
+                    {t("topLevelDomain")}
                     <span className="font-normal text-base">
                       {product.topLevelDomain?.[0]}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    {t('currencies')}
+                    {t("currencies")}
                     <span className="font-normal text-base">
                       {product.currencies}
                     </span>
                   </p>
                   <p className="font-semibold text-lg">
-                    {t('languages')}
+                    {t("languages")}
                     <span className="font-normal text-base">
                       {product.languages}
                     </span>
                   </p>
                 </div>
               </div>
+
               <br />
               <div className="-mt-8">
-                <p className="font-semibold text-lg">{t('borderCountries')}:</p>
+                <p className="font-semibold text-lg">{t("borderCountries")}:</p>
                 <ul className="flex gap-4 flex-wrap ">
                   {product.borders.length > 0 ? (
                     product.borders.map((border, index) => (
@@ -144,7 +148,7 @@ const Cart = () => {
                       </li>
                     ))
                   ) : (
-                    <li>{t('noBordersAvailable')}</li>
+                    <li>{t("noBordersAvailable")}</li>
                   )}
                 </ul>
               </div>
@@ -152,7 +156,7 @@ const Cart = () => {
           </div>
         ) : (
           <div className="flex justify-center items-center mt-12">
-            <p>{t('noProductFound')}</p>
+            <p>{t("noProductFound")}</p>
           </div>
         )}
       </div>
